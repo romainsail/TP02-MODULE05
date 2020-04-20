@@ -10,16 +10,22 @@ namespace Module05_TP02.Controllers
 {
     public class PizzaController : Controller
     {
+
+        public List<Pizza> Pizzas = DataDb.Instance.pizzas;
+        public List<Pate> Pates = DataDb.Instance.pates;
+        public List<Ingredient> Ingredients = DataDb.Instance.ingredients;
+
+
         // GET: Pizza
         public ActionResult Index()
         {
-            return View(DataDb.Instance.Pizzas);
+            return View(Pizzas);
         }
 
         // GET: Pizza/Details/5
         public ActionResult Details(int id)
         {
-            Pizza pizza = DataDb.Instance.pizzas.FirstOrDefault(p => p.Id == id);
+            Pizza pizza = Pizzas.FirstOrDefault(p => p.Id == id);
             return View(pizza);
         }
 
@@ -27,8 +33,8 @@ namespace Module05_TP02.Controllers
         public ActionResult Create()
         {
             PizzaCreateViewModel vm = new PizzaCreateViewModel();
-            vm.Ingredients = DataDb.Instance.ingredients;
-            vm.Pates = DataDb.Instance.pates;
+            vm.Ingredients = Ingredients;
+            vm.Pates = Pates;
             return View(vm);
         }
 
@@ -38,10 +44,6 @@ namespace Module05_TP02.Controllers
         {
             try
             {
-                //La liste des différentes pates
-                var Pates = DataDb.Instance.pates;
-                //la liste des différents ingrédients
-                var Ingredients = DataDb.Instance.ingredients;
                 // Sélection de la pate choisie par l'user dans la liste des pates Pates
                 vm.Pizza.Pate = Pates.FirstOrDefault(x => x.Id == vm.IdPate);
 
@@ -74,8 +76,8 @@ namespace Module05_TP02.Controllers
 
             PizzaCreateViewModel vm = new PizzaCreateViewModel();
             vm.Pizza = DataDb.Instance.pizzas.FirstOrDefault(p => p.Id == id);
-            vm.Ingredients = DataDb.Instance.ingredients;
-            vm.Pates = DataDb.Instance.pates;
+            vm.Ingredients = Ingredients;
+            vm.Pates = Pates;
 
             return View(vm);
         }
@@ -120,7 +122,8 @@ namespace Module05_TP02.Controllers
         // GET: Pizza/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Pizza pizza = Pizzas.FirstOrDefault(p => p.Id == id);
+            return View(pizza);
         }
 
         // POST: Pizza/Delete/5
@@ -129,7 +132,8 @@ namespace Module05_TP02.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
+                Pizza pizza = DataDb.Instance.Pizzas.FirstOrDefault(p => p.Id == id);
+                DataDb.Instance.Pizzas.Remove(pizza);
 
                 return RedirectToAction("Index");
             }
